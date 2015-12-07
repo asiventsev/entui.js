@@ -2,13 +2,13 @@
 #
 # Публичные функции
 # Конструктор:
-# new Mm3::Mm3EditForm(entity_name, meta, callbacks, target, prefix, entity_id, parent_type, parent_id,
+# new EntUI::EntUIEditForm(entity_name, meta, callbacks, target, prefix, entity_id, parent_type, parent_id,
 #    reload_func, select_uplink_func, open_parent_func)
 #
 # Построение формы: build()
 #
 
-class Mm3EditForm
+class EntUIEditForm
   constructor: (entity_name, meta, callbacks, target, prefix, entity_id, parent_type, parent_id,
     reload_func, select_uplink_func, open_parent_func) ->
     @entity_name = entity_name
@@ -91,8 +91,8 @@ class Mm3EditForm
             @flds[cmeta.atr] = @["create_fld_#{kind}"](td, fldn, cmeta.atr, hpars.input, @visible_data[cmeta.atr])
             @callbacks.form_after_create_field td, @visible_data[cmeta.atr], cmeta.atr, cmeta.atr if @callbacks.form_after_create_field
           else
-            if @["Mm3_fld_#{kind}"]
-              @objs[cmeta.atr] = new @["Mm3_fld_#{kind}"](td, fldn, cmeta.atr, cmeta, hpars.input, @visible_data[cmeta.atr], @callbacks)
+            if @["EntUI_fld_#{kind}"]
+              @objs[cmeta.atr] = new @["EntUI_fld_#{kind}"](td, fldn, cmeta.atr, cmeta, hpars.input, @visible_data[cmeta.atr], @callbacks)
               @flds[cmeta.atr] = @objs[cmeta.atr].build()
               @callbacks.form_after_create_field td, @visible_data[cmeta.atr], cmeta.atr, cmeta.atr if @callbacks.form_after_create_field
             else
@@ -209,7 +209,7 @@ class Mm3EditForm
   # ***************************************************************************
   # служебное и отладочное
   # ---------------------------------------------------------------------------
-  ac: (msg) -> console.log "Mm3EditForm: #{msg}"
+  ac: (msg) -> console.log "EntUIEditForm: #{msg}"
   # ---------------------------------------------------------------------------
   set_pars: (target, hash_pars={})->
     target.attr key, hash_pars[key] for key in _.keys(hash_pars)
@@ -219,4 +219,4 @@ class Mm3EditForm
     alert(msg) unless clbk and clbk(msg)
 
 
-Mm3::Mm3EditForm = Mm3EditForm
+EntUI::EntUIEditForm = EntUIEditForm

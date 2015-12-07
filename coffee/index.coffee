@@ -1,5 +1,5 @@
-#= mm3
-#= mm3_data_table
-#= mm3_edit_form
-#= mm3_fld_check
+#= entui
+#= entui_data_table
+#= entui_edit_form
+#= entui_fld_check
 

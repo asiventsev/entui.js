@@ -2,13 +2,13 @@
 #
 # Публичные функции
 # Конструктор:
-# new Mm3::Mm3DataTable(entity_name, meta, callbacks, target, prefix, table_type, parent_type, parent_id,
+# new EntUI::EntUIDataTable(entity_name, meta, callbacks, target, prefix, table_type, parent_type, parent_id,
 #    open_dialog_func, select_uplink_func, ret_fld_list)
 #
 # Построение таблицы: build()
 #
 
-class Mm3DataTable
+class EntUIDataTable
   constructor: (entity_name, meta, callbacks, target, prefix, table_type, parent_type, parent_id,
     open_dialog_func, select_uplink_func, ret_fld_list) ->
     @entity_name = entity_name
@@ -251,7 +251,7 @@ class Mm3DataTable
   # ***************************************************************************
   # служебное и отладочное
   # ---------------------------------------------------------------------------
-  ac: (msg) -> console.log "Mm3DataTable: #{msg}"
+  ac: (msg) -> console.log "EntUIDataTable: #{msg}"
   # ---------------------------------------------------------------------------
   wait: (msg="Ожидание ответа от сервера...") ->
     @is_dlg_open = true
@@ -277,4 +277,4 @@ class Mm3DataTable
     l.join '-t-'
 
 # *****************************************************************************
-Mm3::Mm3DataTable = Mm3DataTable
+EntUI::EntUIDataTable = EntUIDataTable

@@ -2,7 +2,7 @@
 #
 # Публичные функции
 # Конструктор:
-# new Mm3::Mm3EditForm::Mm3_fld_check(target, prefix, fld_name, meta, html_pars, value, callbacks)
+# new EntUI::EntUIEditForm::EntUI_fld_check(target, prefix, fld_name, meta, html_pars, value, callbacks)
 # Где:
 #   target - место на форме, где располагать контрол
 #   prefix - уникальный html id
@@ -20,7 +20,7 @@
 #
 
 
-class Mm3FldCheck
+class EntUIFldCheck
   constructor: (target, prefix, fld_name, meta, html_pars, value, callbacks) ->
     @target = target
     @prefix = prefix
@@ -60,6 +60,6 @@ class Mm3FldCheck
 
 
 # *****************************************************************************
-Mm3::Mm3EditForm::Mm3_fld_check = Mm3FldCheck
+EntUI::EntUIEditForm::EntUI_fld_check = EntUIFldCheck
 
 

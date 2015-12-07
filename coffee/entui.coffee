@@ -1,18 +1,18 @@
 # Класс Moment v3.1
-# Создавать как: obj = new Mm3
+# Создавать как: obj = new EntUI
 #
 # Регистрация меты сущностей:
-#   Mm3_add_entity entity_name, entity_meta
+#   EntUI_add_entity entity_name, entity_meta
 #
 # Регистрация каллбаков:
-#   Mm3_add_callback entity_name, callback_name, func
+#   EntUI_add_callback entity_name, callback_name, func
 #
 # Запуск работы:
 #   obj.start target, entity_name [,entity_id]
 #
 # ****************************************************************************
 
-class Mm3
+class EntUI
   constructor: ->
     @entity_ok = {}
     @prefs = []
@@ -120,10 +120,10 @@ class Mm3
     # Делаем в мете полный комплект опций
     met.opts ?= {}
     default_opts =
-      root: {window: false, create: true, edit: true, paging: true, filters: true, hidden_cols:[], interface: 'Mm3DataTable'}
-      uplink: {window: true, create: true, edit: false, paging: true, filters: true, hidden_cols:[], interface: 'Mm3DataTable'}
-      downlink: {window: false, create: true, edit: true, paging: true, filters: false, hidden_cols:[], interface: 'Mm3DataTable'}
-      form: {hidden_cols:[], interface: 'Mm3EditForm'}
+      root: {window: false, create: true, edit: true, paging: true, filters: true, hidden_cols:[], interface: 'EntUIDataTable'}
+      uplink: {window: true, create: true, edit: false, paging: true, filters: true, hidden_cols:[], interface: 'EntUIDataTable'}
+      downlink: {window: false, create: true, edit: true, paging: true, filters: false, hidden_cols:[], interface: 'EntUIDataTable'}
+      form: {hidden_cols:[], interface: 'EntUIEditForm'}
     is_interface_err = null
     _.each _.keys(default_opts), (k) =>
       m = met.opts?[k] or {}
@@ -181,29 +181,29 @@ class Mm3
 
 # *****************************************************************************
 # Методы вне класса
-window.Mm3 = Mm3
+window.EntUI = EntUI
 # -----------------------------------------------------------------------------
 # Добавление сущности
 # должна выполняться после загрузки Moment но до создания экземпляра
-window.Mm3_add_entity = (entity_name, entity_meta) ->
-  Mm3::meta[entity_name] = entity_meta
-  Mm3::callbacks[entity_name] = Mm3::callbacks[entity_name] or {}
+window.EntUI_add_entity = (entity_name, entity_meta) ->
+  EntUI::meta[entity_name] = entity_meta
+  EntUI::callbacks[entity_name] = EntUI::callbacks[entity_name] or {}
 
 # -----------------------------------------------------------------------------
 # Регистрация коллбаков
 #  должна выполняться после загрузки Moment но до создания экземпляра
-window.Mm3_add_callback = (entity_name, callback_name, func) ->
+window.EntUI_add_callback = (entity_name, callback_name, func) ->
   return null unless typeof func is "function"
-  Mm3::callbacks[entity_name] = Mm3::callbacks[entity_name] or {}
-  Mm3::callbacks[entity_name][callback_name] = func
+  EntUI::callbacks[entity_name] = EntUI::callbacks[entity_name] or {}
+  EntUI::callbacks[entity_name][callback_name] = func
 
 
 # -----------------------------------------------------------------------------
-jQuery.fn.Mm3 = (entity_name, entity_id) ->
+jQuery.fn.EntUI = (entity_name, entity_id) ->
   if entity_name
-    obj = new Mm3()
+    obj = new EntUI()
     obj.start $(@[0]), entity_name, entity_id
-    jQuery.data $(@[0]), "Mm3", obj
+    jQuery.data $(@[0]), "EntUI", obj
     obj
   else
-    jQuery.data $(@[0]), "Mm3"
+    jQuery.data $(@[0]), "EntUI"
