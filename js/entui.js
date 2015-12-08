@@ -6,8 +6,6 @@
     function EntUI() {
       this.entity_ok = {};
       this.prefs = [];
-      this.targets = {};
-      this.entities = {};
       this.tables = {};
       this.objs = {};
     }
@@ -34,7 +32,7 @@
       }
       met = this.meta[entity_name];
       prefix = parent_prefix + '-t-' + entity_name;
-      this.add_prefix(prefix, target, entity_name);
+      this.add_prefix(prefix, entity_name);
       table_place = $("<div class=\"table-place\" id=\"" + prefix + "\"/>");
       table_type = ret_func_uplink ? 'uplink' : (_.isEmpty(parent_prefix) ? 'root' : 'downlink');
       is_window = table_type === 'uplink' && met.opts.uplink.window;
@@ -81,7 +79,7 @@
       }
       met = this.meta[entity_name];
       prefix = parent_prefix + '-f-' + entity_name;
-      this.add_prefix(prefix, target, entity_name);
+      this.add_prefix(prefix, entity_name);
       show_place = $("<div class=\"show-place\" id=\"" + prefix + "\" />");
       form_place = $("<div class=\"form-place\" id=\"" + prefix + "-f\"/>");
       form_interface = met.opts['form']["interface"];
@@ -106,12 +104,21 @@
       tabs_place.append(ul);
       _.each(met.form_tabs || [], (function(_this) {
         return function(tab) {
-          var tab_pls;
-          ul.append($("<li><a href=\"#-" + prefix + "-tab-" + tab.name + "\">" + (tab.label || tab.name) + "</a></li>"));
-          tab_pls = $("<div id=\"-" + prefix + "-tab-" + tab.name + "\">" + (tab.kind === 'text' ? tab.text : '') + "</div>");
+          var tab_pls, tab_pref;
+          tab_pref = "-" + prefix + "-tab-" + tab.name;
+          ul.append($("<li><a href=\"#" + tab_pref + "\">" + (tab.label || tab.name) + "</a></li>"));
+          tab_pls = $("<div id=\"" + tab_pref + "\"></div>");
           tabs_place.append(tab_pls);
           if (tab.kind === 'downlink') {
             return _this.table(tab_pls, tab.entity || tab.name, prefix, entity_name, entity_id);
+          } else {
+            if (_this["EntUI_tab_" + tab.kind]) {
+              _this.add_prefix(tab_pref, entity_name);
+              _this.objs[tab_pref] = new _this["EntUI_tab_" + tab.kind](tab_pls, tab_pref, tab, _this.callbacks, entity_name, entity_id);
+              return _this.objs[tab_pref].build();
+            } else {
+              return _this.ac("ERROR: Не найден способ создания таба '" + tab.kind + "' для сущности '" + entity_name);
+            }
           }
         };
       })(this));
@@ -226,11 +233,9 @@
       })(this));
     };
 
-    EntUI.prototype.add_prefix = function(prefix, target, entity_name) {
+    EntUI.prototype.add_prefix = function(prefix, entity_name) {
       if (_.indexOf(this.prefs, prefix) < 0) {
-        this.prefs.push(prefix);
-        this.targets[prefix] = target;
-        return this.entities[prefix] = entity_name;
+        return this.prefs.push(prefix);
       } else {
         return this.ac("ERROR Для сущности '" + entity_name + "' появился дублирующийся префикс " + prefix);
       }
@@ -240,12 +245,6 @@
       var pr;
       if (_.indexOf(this.prefs, prefix) >= 0) {
         while (pr = this.prefs.pop()) {
-          if (this.targets[pr]) {
-            delete this.targets[pr];
-          }
-          if (this.entities[pr]) {
-            delete this.entities[pr];
-          }
           if (this.objs[pr]) {
             delete this.objs[pr];
           }

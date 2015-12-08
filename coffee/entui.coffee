@@ -16,8 +16,6 @@ class EntUI
   constructor: ->
     @entity_ok = {}
     @prefs = []
-    @targets = {}
-    @entities = {}
     @tables = {}
     @objs = {}
   meta: {}
@@ -37,7 +35,7 @@ class EntUI
     return false unless @verify_meta entity_name
     met = @meta[entity_name]
     prefix = parent_prefix + '-t-' + entity_name
-    @add_prefix prefix, target, entity_name
+    @add_prefix prefix, entity_name
     table_place = $ "<div class=\"table-place\" id=\"#{prefix}\"/>"
     # Построение таблицы
     table_type = if ret_func_uplink then 'uplink' else (if _.isEmpty(parent_prefix) then 'root' else 'downlink')
@@ -67,7 +65,7 @@ class EntUI
     return false unless @verify_meta entity_name
     met = @meta[entity_name]
     prefix = parent_prefix + '-f-' + entity_name
-    @add_prefix prefix, target, entity_name
+    @add_prefix prefix, entity_name
     # Построение карточки
     show_place  = $ "<div class=\"show-place\" id=\"#{prefix}\" />"
     # Построение формы
@@ -88,11 +86,19 @@ class EntUI
     ul = $("<ul />")
     tabs_place.append ul
     _.each (met.form_tabs or []), (tab) =>
-      ul.append $("<li><a href=\"#-#{prefix}-tab-#{tab.name}\">#{tab.label||tab.name}</a></li>")
-      tab_pls = $("<div id=\"-#{prefix}-tab-#{tab.name}\">#{if tab.kind is 'text' then tab.text else ''}</div>")
+      tab_pref = "-#{prefix}-tab-#{tab.name}"
+      ul.append $("<li><a href=\"##{tab_pref}\">#{tab.label||tab.name}</a></li>")
+      tab_pls = $("<div id=\"#{tab_pref}\"></div>")
       tabs_place.append tab_pls
       if tab.kind is 'downlink'
         @table tab_pls, (tab.entity or tab.name), prefix, entity_name, entity_id
+      else
+        if @["EntUI_tab_#{tab.kind}"]
+          @add_prefix tab_pref, entity_name
+          @objs[tab_pref] = new @["EntUI_tab_#{tab.kind}"](tab_pls, tab_pref, tab, @callbacks, entity_name, entity_id)
+          @objs[tab_pref].build()
+        else
+          @ac "ERROR: Не найден способ создания таба '#{tab.kind}' для сущности '#{entity_name}"
     # построение диалога
     $(target).append show_place
     ttl = if entity_id is 'new'
@@ -151,11 +157,9 @@ class EntUI
 
   # ---------------------------------------------------------------------------
   # Новый префикс в стеке
-  add_prefix: (prefix, target, entity_name)->
+  add_prefix: (prefix, entity_name)->
     if _.indexOf(@prefs, prefix)<0
       @prefs.push prefix
-      @targets[prefix] = target
-      @entities[prefix] = entity_name
     else
       @ac "ERROR Для сущности '#{entity_name}' появился дублирующийся префикс #{prefix}"
 
@@ -164,8 +168,6 @@ class EntUI
   del_prefix: (prefix) ->
     if _.indexOf(@prefs, prefix)>=0
       while pr = @prefs.pop()
-        delete @targets[pr] if @targets[pr]
-        delete @entities[pr] if @entities[pr]
         delete @objs[pr] if @objs[pr]
         return if pr is prefix
 
