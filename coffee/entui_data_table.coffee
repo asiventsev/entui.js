@@ -48,8 +48,8 @@ class EntUIDataTable
   # построение фильтров
   build_filters: () ->
     filter_table = $('<table class="filter_table"/>').hide()
-    tr_lab = $('<tr>')
-    tr_sel = $('<tr>')
+    tr_lab = $('<tr />')
+    tr_sel = $('<tr />')
     _.each (@meta.filters or []), (f)=>
       lab = f.label
       unless lab
@@ -60,11 +60,12 @@ class EntUIDataTable
       sel = $("<select id=\"#{@prefix}-flt-#{f.atr}\" class=\"#{@prefix}-seltag\" />")
       sel.change ()=> @filter_change f.atr, sel.val()
       tr_sel.append $('<td />').append(sel)
-      clear_filters_button = $("<td id=\"#{@prefix}-entity_clear_filters\" class=\"icon icon-false\"> </td>").hide()
-      clear_filters_button.click ()=> @clear_filters()
-      tr_lab.append $("<td />")
-      tr_sel.append clear_filters_button
       filter_table.append(tr_lab).append(tr_sel)
+    clear_filters_button = $("<span id=\"#{@prefix}-entity_clear_filters\" class=\"icon icon-false\"> </span>").hide() clear_td = $('<td />')
+    clear_td.append clear_filters_button
+    clear_filters_button.click ()=> @clear_filters()
+    tr_lab.append "<td />"
+    tr_sel.append clear_td
     if @opts.filters and @meta.filters
       @wait()
       req = $.getJSON "/data/filters/#{@entity_name}", {type: 'json', prefix: @prefix}

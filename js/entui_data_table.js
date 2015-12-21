@@ -37,13 +37,13 @@
     };
 
     EntUIDataTable.prototype.build_filters = function() {
-      var filter_table, req, tr_lab, tr_sel;
+      var clear_filters_button, clear_td, filter_table, req, tr_lab, tr_sel;
       filter_table = $('<table class="filter_table"/>').hide();
-      tr_lab = $('<tr>');
-      tr_sel = $('<tr>');
+      tr_lab = $('<tr />');
+      tr_sel = $('<tr />');
       _.each(this.meta.filters || [], (function(_this) {
         return function(f) {
-          var clear_filters_button, col, lab, sel;
+          var col, lab, sel;
           lab = f.label;
           if (!lab) {
             col = _.find(_this.meta.cols, function(c) {
@@ -62,15 +62,18 @@
             return _this.filter_change(f.atr, sel.val());
           });
           tr_sel.append($('<td />').append(sel));
-          clear_filters_button = $("<td id=\"" + _this.prefix + "-entity_clear_filters\" class=\"icon icon-false\"> </td>").hide();
-          clear_filters_button.click(function() {
-            return _this.clear_filters();
-          });
-          tr_lab.append($("<td />"));
-          tr_sel.append(clear_filters_button);
           return filter_table.append(tr_lab).append(tr_sel);
         };
       })(this));
+      clear_filters_button = $("<span id=\"" + this.prefix + "-entity_clear_filters\" class=\"icon icon-false\"> </span>").hide()(clear_td = $('<td />'));
+      clear_td.append(clear_filters_button);
+      clear_filters_button.click((function(_this) {
+        return function() {
+          return _this.clear_filters();
+        };
+      })(this));
+      tr_lab.append("<td />");
+      tr_sel.append(clear_td);
       if (this.opts.filters && this.meta.filters) {
         this.wait();
         req = $.getJSON("/data/filters/" + this.entity_name, {

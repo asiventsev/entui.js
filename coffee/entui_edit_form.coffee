@@ -53,7 +53,7 @@ class EntUIEditForm
   build_form: (is_edit)->
     # строим и оживляем кнопки
     buttons_div = $("<div id=\"#{@prefix}-btn\" class=\"contextual\" />")
-    button_data=[
+    button_data = if @meta.opts.form?.readonly then [] else [
       {"icon":"save","name":"save_entity","text": (if is_edit then "сохранить" else "создать"),"func": ()=> @save()}
     ]
     _.each button_data, (b)=>
@@ -168,6 +168,7 @@ class EntUIEditForm
   create_fld_span: (td, pref, fldn, pars, value)->
     value ?=  ''
     fld = $("<span id=\"#{pref}\">#{value}</span>")
+    td.attr "style", ""
     @set_pars fld, pars
     fld.val value
     td.append fld
@@ -193,8 +194,11 @@ class EntUIEditForm
         hid.val ''
         hname.text ''
     hname.click ()=>
-      @open_parent_func (@fld_meta[fldn].entity or fldn), value
-    tbl.append hid, tr.append($("<td />").append(hname)), tr.append($("<td />").append(hsel)), tr.append($("<td />").append(hclear))
+      unless hid.val() is null or hid.val() is 'null' or hid.val() is ''
+        @open_parent_func (@fld_meta[fldn].entity or fldn), value
+    tbl.append hid, tr.append($("<td />").append(hname))
+    unless @fld_meta[fldn].frozen
+      tbl.append tr.append($("<td />").append(hsel)), tr.append($("<td />").append(hclear))
     td.append tbl
     hid
 

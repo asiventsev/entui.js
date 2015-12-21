@@ -52,9 +52,9 @@
     };
 
     EntUIEditForm.prototype.build_form = function(is_edit) {
-      var button_data, buttons_div, ft, hdr;
+      var button_data, buttons_div, ft, hdr, _ref;
       buttons_div = $("<div id=\"" + this.prefix + "-btn\" class=\"contextual\" />");
-      button_data = [
+      button_data = ((_ref = this.meta.opts.form) != null ? _ref.readonly : void 0) ? [] : [
         {
           "icon": "save",
           "name": "save_entity",
@@ -93,7 +93,7 @@
           tr = $("<tr />");
           _this.set_pars(tr, cells_lst[1]);
           return _.each(cells, function(cmeta) {
-            var fldn, hpars, kind, td, td_label, _base, _ref, _ref1, _ref2;
+            var fldn, hpars, kind, td, td_label, _base, _ref1, _ref2, _ref3;
             _this.fld_meta[cmeta.atr] = cmeta;
             kind = cmeta.kind || 'text';
             td_label = $("<td align=\"right\" />");
@@ -105,9 +105,9 @@
               td_label.attr("id", fldn + "-label");
               td_label.text(cmeta.label || '');
               hpars = {
-                td: ((_ref = cmeta.html) != null ? _ref.td : void 0) || {},
-                input: ((_ref1 = cmeta.html) != null ? _ref1.input : void 0) || {},
-                span: ((_ref2 = cmeta.html) != null ? _ref2.span : void 0) || {}
+                td: ((_ref1 = cmeta.html) != null ? _ref1.td : void 0) || {},
+                input: ((_ref2 = cmeta.html) != null ? _ref2.input : void 0) || {},
+                span: ((_ref3 = cmeta.html) != null ? _ref3.span : void 0) || {}
               };
               if ((_base = hpars.td).style == null) {
                 _base.style = '';
@@ -255,6 +255,7 @@
         value = '';
       }
       fld = $("<span id=\"" + pref + "\">" + value + "</span>");
+      td.attr("style", "");
       this.set_pars(fld, pars);
       fld.val(value);
       td.append(fld);
@@ -291,10 +292,15 @@
       })(this));
       hname.click((function(_this) {
         return function() {
-          return _this.open_parent_func(_this.fld_meta[fldn].entity || fldn, value);
+          if (!(hid.val() === null || hid.val() === 'null' || hid.val() === '')) {
+            return _this.open_parent_func(_this.fld_meta[fldn].entity || fldn, value);
+          }
         };
       })(this));
-      tbl.append(hid, tr.append($("<td />").append(hname)), tr.append($("<td />").append(hsel)), tr.append($("<td />").append(hclear)));
+      tbl.append(hid, tr.append($("<td />").append(hname)));
+      if (!this.fld_meta[fldn].frozen) {
+        tbl.append(tr.append($("<td />").append(hsel)), tr.append($("<td />").append(hclear)));
+      }
       td.append(tbl);
       return hid;
     };

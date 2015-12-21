@@ -129,7 +129,7 @@ class EntUI
       root: {window: false, create: true, edit: true, paging: true, filters: true, hidden_cols:[], interface: 'EntUIDataTable'}
       uplink: {window: true, create: true, edit: false, paging: true, filters: true, hidden_cols:[], interface: 'EntUIDataTable'}
       downlink: {window: false, create: true, edit: true, paging: true, filters: false, hidden_cols:[], interface: 'EntUIDataTable'}
-      form: {hidden_cols:[], interface: 'EntUIEditForm'}
+      form: {readonly: false, hidden_cols:[], interface: 'EntUIEditForm'}
     is_interface_err = null
     _.each _.keys(default_opts), (k) =>
       m = met.opts?[k] or {}

@@ -183,6 +183,7 @@
           "interface": 'EntUIDataTable'
         },
         form: {
+          readonly: false,
           hidden_cols: [],
           "interface": 'EntUIEditForm'
         }
