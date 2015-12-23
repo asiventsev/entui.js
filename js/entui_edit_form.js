@@ -81,10 +81,8 @@
             return lab = lab.replace('#{' + k + '}', _this.visible_data[k]);
           };
         })(this)), this.meta.label_template);
-      } else {
-        hdr = '__ № __ ';
+        this.target.append("<h2 id=\"" + this.prefix + "-hdr\">" + hdr + "</h2>");
       }
-      this.target.append("<h2 id=\"" + this.prefix + "-hdr\">" + hdr + "</h2>");
       ft = $("<table style=\"border-collapse: collapse;\" />");
       _.each(this.meta.form, (function(_this) {
         return function(cells_lst) {

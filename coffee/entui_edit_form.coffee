@@ -63,9 +63,7 @@ class EntUIEditForm
     @target.append buttons_div
     if is_edit and @meta.label_template
       hdr = _.reduce _.keys(@visible_data), ((lab, k)=> lab = lab.replace('#{'+k+'}',@visible_data[k])), @meta.label_template
-    else
-      hdr = '__ № __ '
-    @target.append "<h2 id=\"#{@prefix}-hdr\">#{hdr}</h2>"
+      @target.append "<h2 id=\"#{@prefix}-hdr\">#{hdr}</h2>"
     # строим тело формы
     ft=$("<table style=\"border-collapse: collapse;\" />")
     _.each @meta.form, (cells_lst)=>

@@ -61,7 +61,8 @@ class EntUIDataTable
       sel.change ()=> @filter_change f.atr, sel.val()
       tr_sel.append $('<td />').append(sel)
       filter_table.append(tr_lab).append(tr_sel)
-    clear_filters_button = $("<span id=\"#{@prefix}-entity_clear_filters\" class=\"icon icon-false\"> </span>").hide() clear_td = $('<td />')
+    clear_filters_button = $("<span id=\"#{@prefix}-entity_clear_filters\" class=\"icon icon-false\"> </span>").hide()
+    clear_td = $('<td />')
     clear_td.append clear_filters_button
     clear_filters_button.click ()=> @clear_filters()
     tr_lab.append "<td />"

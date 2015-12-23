@@ -65,7 +65,8 @@
           return filter_table.append(tr_lab).append(tr_sel);
         };
       })(this));
-      clear_filters_button = $("<span id=\"" + this.prefix + "-entity_clear_filters\" class=\"icon icon-false\"> </span>").hide()(clear_td = $('<td />'));
+      clear_filters_button = $("<span id=\"" + this.prefix + "-entity_clear_filters\" class=\"icon icon-false\"> </span>").hide();
+      clear_td = $('<td />');
       clear_td.append(clear_filters_button);
       clear_filters_button.click((function(_this) {
         return function() {
