@@ -41,7 +41,7 @@ class EntUIFldCheck
     this
 
   val: (value)->
-    if value is null
+    unless value
       @value = @fld.prop("checked")
     else
       @set_val value

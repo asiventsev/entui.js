@@ -109,6 +109,7 @@ class EntUIEditForm
       data: {data: d}
       type: 'POST'
       dataType: 'json'
+      timeout: 20000
       success: (data)=>
         if data.errors
           @alert data.errors
@@ -202,7 +203,7 @@ class EntUIEditForm
 
   create_fld_hidden: (td, pref, fldn, pars, value)->
     fld = $("<input type=\"hidden\" id=\"#{pref}\" />")
-    fld.val value if value
+    fld.val value if value isnt null
     td.append fld
     td.parent().find("##{pref}-label").text ''
     fld

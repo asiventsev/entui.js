@@ -154,6 +154,7 @@
         },
         type: 'POST',
         dataType: 'json',
+        timeout: 20000,
         success: (function(_this) {
           return function(data) {
             if (data.errors) {
@@ -306,7 +307,7 @@
     EntUIEditForm.prototype.create_fld_hidden = function(td, pref, fldn, pars, value) {
       var fld;
       fld = $("<input type=\"hidden\" id=\"" + pref + "\" />");
-      if (value) {
+      if (value !== null) {
         fld.val(value);
       }
       td.append(fld);

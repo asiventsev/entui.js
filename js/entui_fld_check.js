@@ -25,7 +25,7 @@
     };
 
     EntUIFldCheck.prototype.val = function(value) {
-      if (value === null) {
+      if (!value) {
         this.value = this.fld.prop("checked");
       } else {
         this.set_val(value);

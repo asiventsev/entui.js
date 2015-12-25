@@ -31,7 +31,7 @@ class EntUI
 
   # ---------------------------------------------------------------------------
   # Построение лайота для таблицы
-  table: (target, entity_name, parent_prefix="", parent_type, parent_id, ret_func_uplink, ret_fld_list) ->
+  table: (target, entity_name, parent_prefix="", parent_type, parent_id, parent_atr, ret_func_uplink, ret_fld_list) ->
     return false unless @verify_meta entity_name
     met = @meta[entity_name]
     prefix = parent_prefix + '-t-' + entity_name
@@ -50,7 +50,7 @@ class EntUI
           @dialog_close table_place, prefix if is_window
     # создание таблицы в плагине
     @objs[prefix] = new @[table_interface](entity_name, met, @callbacks[entity_name],
-      table_place, prefix, table_type, parent_type, parent_id, open_dialog_func, select_uplink_func, ret_fld_list)
+      table_place, prefix, table_type, parent_type, parent_id, parent_atr, open_dialog_func, select_uplink_func, ret_fld_list)
     @objs[prefix].build()
     # обновление таблицы по внешней команде
     reload_func = ()=> @objs[prefix].build()
@@ -91,7 +91,7 @@ class EntUI
       tab_pls = $("<div id=\"#{tab_pref}\"></div>")
       tabs_place.append tab_pls
       if tab.kind is 'downlink'
-        @table tab_pls, (tab.entity or tab.name), prefix, entity_name, entity_id
+        @table tab_pls, (tab.entity or tab.name), prefix, entity_name, entity_id, tab.atr
       else
         if @["EntUI_tab_#{tab.kind}"]
           @add_prefix tab_pref, entity_name

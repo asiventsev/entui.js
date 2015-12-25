@@ -3,7 +3,7 @@
   var EntUIDataTable;
 
   EntUIDataTable = (function() {
-    function EntUIDataTable(entity_name, meta, callbacks, target, prefix, table_type, parent_type, parent_id, open_dialog_func, select_uplink_func, ret_fld_list) {
+    function EntUIDataTable(entity_name, meta, callbacks, target, prefix, table_type, parent_type, parent_id, parent_atr, open_dialog_func, select_uplink_func, ret_fld_list) {
       this.entity_name = entity_name;
       this.meta = meta;
       this.opts = meta.opts[table_type];
@@ -12,6 +12,7 @@
       this.prefix = prefix;
       this.table_type = table_type;
       this.parent_type = parent_type;
+      this.parent_atr = parent_atr;
       this.parent_id = parent_id;
       this.open_dialog_func = open_dialog_func;
       this.select_uplink_func = select_uplink_func;
@@ -204,7 +205,7 @@
     };
 
     EntUIDataTable.prototype.build_table = function() {
-      var c, et, hiden_numbers, i, table_pars, th_s, _i, _len, _ref;
+      var c, et, hiden_numbers, hidens, i, table_pars, th_s, _i, _len, _ref;
       this.target.append($("<h2>" + this.meta.table_header + "</h2>"));
       this.target.append($("<style>#" + this.prefix + "-entity_table td{text-align:center;}</style>"));
       et = $("<table id=\"" + this.prefix + "-entity_table\"></table>");
@@ -217,12 +218,16 @@
       th_s += "</tr></thead>";
       et.append($(th_s));
       this.target.append(et);
+      hidens = this.opts.hidden_cols.slice(0);
+      if (this.table_type === 'downlink' && this.parent_atr) {
+        hidens.push(this.parent_atr);
+      }
       _ref = this.meta.cols;
       for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
         c = _ref[i];
         this.col_numbers[c.atr] = i;
       }
-      hiden_numbers = _.map(this.opts.hidden_cols, (function(_this) {
+      hiden_numbers = _.map(hidens, (function(_this) {
         return function(c) {
           return _this.col_numbers[c];
         };

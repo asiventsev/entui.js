@@ -3,13 +3,13 @@
 # Публичные функции
 # Конструктор:
 # new EntUI::EntUIDataTable(entity_name, meta, callbacks, target, prefix, table_type, parent_type, parent_id,
-#    open_dialog_func, select_uplink_func, ret_fld_list)
+#    parent_atr, open_dialog_func, select_uplink_func, ret_fld_list)
 #
 # Построение таблицы: build()
 #
 
 class EntUIDataTable
-  constructor: (entity_name, meta, callbacks, target, prefix, table_type, parent_type, parent_id,
+  constructor: (entity_name, meta, callbacks, target, prefix, table_type, parent_type, parent_id, parent_atr,
     open_dialog_func, select_uplink_func, ret_fld_list) ->
     @entity_name = entity_name
     @meta = meta
@@ -19,6 +19,7 @@ class EntUIDataTable
     @prefix = prefix
     @table_type = table_type
     @parent_type = parent_type
+    @parent_atr = parent_atr
     @parent_id = parent_id
     @open_dialog_func = open_dialog_func
     @select_uplink_func = select_uplink_func
@@ -145,8 +146,10 @@ class EntUIDataTable
     et.append $(th_s)
     @target.append et
     # строим хеш колонок и список невидимых
+    hidens = @opts.hidden_cols.slice(0)
+    hidens.push @parent_atr if @table_type is 'downlink' and @parent_atr
     @col_numbers[c.atr]=i for c, i in @meta.cols
-    hiden_numbers = _.map @opts.hidden_cols, (c)=> @col_numbers[c]
+    hiden_numbers = _.map hidens, (c)=> @col_numbers[c]
     # инициализируем таблицу
     table_pars =
       sAjaxSource: @meta.url_table or "/data/table/#{@entity_name}"
