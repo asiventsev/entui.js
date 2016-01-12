@@ -89,7 +89,7 @@ html>body #content { min-height: 600px; }
 #login-form label {font-weight: bold;}
 #login-form input#username, #login-form input#password { width: 300px; }
 
-input#openid_url { background: url(<%= asset_path "moment2/openid-bg.gif" %>) no-repeat; background-color: #ffffff; background-position: 0 50%; padding-left: 18px; }
+input#openid_url { background: url(<%= asset_path "entui/openid-bg.gif" %>) no-repeat; background-color: #ffffff; background-position: 0 50%; padding-left: 18px; }
 
 .clear:after{ content: "."; display: block; height: 0; clear: both; visibility: hidden; }
 
@@ -132,24 +132,23 @@ table p {margin:0;}
     padding-bottom: 3px;
 }
 
-.icon-time  { background-image: url(<%= asset_path "moment2/time.png" %>); }
-.icon-admin { background-image: url(<%= asset_path "moment2/admin.png" %>); }
-.icon-save { background-image: url(<%= asset_path "moment2/save.png" %>); }
-.icon-user { background-image: url(<%= asset_path "moment2/user.png" %>); }
-.icon-xls { background-image: url(<%= asset_path "moment2/xls.png" %>); }
-.icon-add { background-image: url(<%= asset_path "moment2/add.png" %>); }
-.icon-move { background-image: url(<%= asset_path "moment2/move.png" %>); }
-.icon-edit { background-image: url(<%= asset_path "moment2/edit.png" %>); }
-.icon-cancel { background-image: url(<%= asset_path "moment2/cancel.png" %>); }
-.icon-false { background-image: url(<%= asset_path "moment2/false.png" %>); }
-.icon-zoom_in { background-image: url(<%= asset_path "moment2/zoom_in.png" %>); }
-.icon-reload { background-image: url(<%= asset_path "moment2/reload.png" %>); }
-.icon-delete { background-image: url(<%= asset_path "moment2/delete.png" %>); }
-.icon-true { background-image: url(<%= asset_path "moment2/true.png" %>); }
-.icon-copy { background-image: url(<%= asset_path "moment2/copy.png" %>); }
-.icon-1s { background-image: url(<%= asset_path "moment2/1s.gif" %>); }
-.icon-package { background-image: url(<%= asset_path "moment2/package.png" %>); }
-.icon-logo { background-image: url(<%= asset_path "moment2/KabinetLogo.gif" %>); }
+.icon-time  { background-image: url(<%= asset_path "entui/time.png" %>); }
+.icon-admin { background-image: url(<%= asset_path "entui/admin.png" %>); }
+.icon-save { background-image: url(<%= asset_path "entui/save.png" %>); }
+.icon-user { background-image: url(<%= asset_path "entui/user.png" %>); }
+.icon-xls { background-image: url(<%= asset_path "entui/xls.png" %>); }
+.icon-add { background-image: url(<%= asset_path "entui/add.png" %>); }
+.icon-move { background-image: url(<%= asset_path "entui/move.png" %>); }
+.icon-edit { background-image: url(<%= asset_path "entui/edit.png" %>); }
+.icon-cancel { background-image: url(<%= asset_path "entui/cancel.png" %>); }
+.icon-false { background-image: url(<%= asset_path "entui/false.png" %>); }
+.icon-zoom_in { background-image: url(<%= asset_path "entui/zoom_in.png" %>); }
+.icon-reload { background-image: url(<%= asset_path "entui/reload.png" %>); }
+.icon-delete { background-image: url(<%= asset_path "entui/delete.png" %>); }
+.icon-true { background-image: url(<%= asset_path "entui/true.png" %>); }
+.icon-copy { background-image: url(<%= asset_path "entui/copy.png" %>); }
+.icon-1s { background-image: url(<%= asset_path "entui/1s.gif" %>); }
+.icon-package { background-image: url(<%= asset_path "entui/package.png" %>); }
 
 /* My add */
 
@@ -180,7 +179,7 @@ table{font-size: 12px;}
 div.flash {margin-top: 8px;}
 
 div.flash.error, #errorExplanation {
-    background: url(<%= asset_path "moment2/exclamation.png" %>) 8px 50% no-repeat;
+    background: url(<%= asset_path "entui/exclamation.png" %>) 8px 50% no-repeat;
     background-color: #ffe5e3;
     color: #880b00;
     border: solid 1px #dd1200;
@@ -188,7 +187,7 @@ div.flash.error, #errorExplanation {
 }
 
 div.flash.notice {
-    background: url(<%= asset_path "moment2/true.png" %>) 8px 5px no-repeat;
+    background: url(<%= asset_path "entui/true.png" %>) 8px 5px no-repeat;
     background-color: #dfffe2;
     color: #005f08;
     border: solid 1px #9fcfa3;
@@ -196,7 +195,7 @@ div.flash.notice {
 }
 
 div.flash.warning {
-    background: url(<%= asset_path "moment2/warning.png" %>) 8px 5px no-repeat;
+    background: url(<%= asset_path "entui/warning.png" %>) 8px 5px no-repeat;
     background-color: #fff0c1;
     border-color: #fdcf3b;
     color: #a6810c;
@@ -385,4 +384,11 @@ table.dataTable thead .sorting::after {
 .body-place, .header-place {
     margin-left: 10px;
     margin-right: 10px;
+}
+
+.scrolable {
+    overflow: scroll;
+    width: 700px;
+    height: 300px;
+    padding: 5px;
 }

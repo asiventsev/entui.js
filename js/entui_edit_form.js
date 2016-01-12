@@ -261,6 +261,20 @@
       return fld;
     };
 
+    EntUIEditForm.prototype.create_fld_div = function(td, pref, fldn, pars, value) {
+      var fld;
+      if (value == null) {
+        value = '';
+      }
+      td.parent().find('td').attr('valign', 'top');
+      fld = $("<div id=\"" + pref + "\" class=\"scrolable\">" + value + "</div>");
+      td.attr("style", "");
+      this.set_pars(fld, pars);
+      fld.val(value);
+      td.append(fld);
+      return fld;
+    };
+
     EntUIEditForm.prototype.create_fld_link = function(td, pref, fldn, pars, value) {
       var e_name, hclear, hid, hname, hsel, name, ret_fld_list, tbl, tr;
       e_name = this.fld_meta[fldn].entity || fldn;
@@ -291,8 +305,10 @@
       })(this));
       hname.click((function(_this) {
         return function() {
-          if (!(hid.val() === null || hid.val() === 'null' || hid.val() === '')) {
-            return _this.open_parent_func(_this.fld_meta[fldn].entity || fldn, value);
+          var v;
+          v = hid.val();
+          if (!_this.isBlank(v)) {
+            return _this.open_parent_func(_this.fld_meta[fldn].entity || fldn, v);
           }
         };
       })(this));
@@ -317,6 +333,16 @@
 
     EntUIEditForm.prototype.ac = function(msg) {
       return console.log("EntUIEditForm: " + msg);
+    };
+
+    EntUIEditForm.prototype.isBlank = function(v) {
+      if (!v) {
+        return true;
+      }
+      if (v === 'null' || v === '' || v === 'undefined') {
+        return true;
+      }
+      return false;
     };
 
     EntUIEditForm.prototype.set_pars = function(target, hash_pars) {

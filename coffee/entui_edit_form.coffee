@@ -173,6 +173,16 @@ class EntUIEditForm
     td.append fld
     fld
 
+  create_fld_div: (td, pref, fldn, pars, value)->
+    value ?=  ''
+    td.parent().find('td').attr('valign','top')
+    fld = $("<div id=\"#{pref}\" class=\"scrolable\">#{value}</div>")
+    td.attr "style", ""
+    @set_pars fld, pars
+    fld.val value
+    td.append fld
+    fld
+
   create_fld_link: (td, pref, fldn, pars, value)->
     e_name = @fld_meta[fldn].entity or fldn
     if (@entity_id is null) and @parent_type and @parent_id and (@parent_type is e_name)
@@ -193,8 +203,9 @@ class EntUIEditForm
         hid.val ''
         hname.text ''
     hname.click ()=>
-      unless hid.val() is null or hid.val() is 'null' or hid.val() is ''
-        @open_parent_func (@fld_meta[fldn].entity or fldn), value
+      v = hid.val()
+      unless @isBlank(v)
+        @open_parent_func (@fld_meta[fldn].entity or fldn), v
     tbl.append hid, tr.append($("<td />").append(hname))
     unless @fld_meta[fldn].frozen
       tbl.append tr.append($("<td />").append(hsel)), tr.append($("<td />").append(hclear))
@@ -213,6 +224,12 @@ class EntUIEditForm
   # служебное и отладочное
   # ---------------------------------------------------------------------------
   ac: (msg) -> console.log "EntUIEditForm: #{msg}"
+  # ---------------------------------------------------------------------------
+  isBlank: (v) ->
+    return true unless v
+    return true if v is 'null' or v is '' or v is 'undefined'
+    false
+
   # ---------------------------------------------------------------------------
   set_pars: (target, hash_pars={})->
     target.attr key, hash_pars[key] for key in _.keys(hash_pars)
