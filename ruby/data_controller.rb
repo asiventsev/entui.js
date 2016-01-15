@@ -2,6 +2,10 @@ class DataController < ApplicationController
   before_filter :get_entity
 
   def table
+    if @cls.methods.include?(:custom_request)
+       render json: @cls.send(:custom_request, params, session)
+       return
+    end
     count = nil
     if params[:parent_id].blank? && (!params[:parent_type].blank?)
       lst = []
@@ -9,11 +13,11 @@ class DataController < ApplicationController
       lst = nil
       flds=@cls.entity_meta[:cols].map{|f| f[:atr]}
       att = @cls.new.attributes.keys
-      req = @cls
+      req = @cls.methods.include?(:get_request) ?  @cls.send(:get_request, params, session) : @cls
       req =  req.includes(*@cls.entity_meta[:includes]) unless @cls.entity_meta[:includes].blank?
       unless params[:parent_id].blank?
         ret = @cls.methods.include?(:custom_parent) ? @cls.send(:custom_parent, req, params[:parent_type], params[:parent_id]) : nil
-        req = ret ? ret : req.where("#{params[:parent_type]}_id" => params[:parent_id])
+        req = ret ? ret : req.where((params[:foreign_key] ? params[:foreign_key].to_s : "#{params[:parent_type]}_id") => params[:parent_id])
       end
       if params[:iDisplayLength].to_i > 0
         count = req.count
@@ -53,31 +57,7 @@ class DataController < ApplicationController
     render json: { data: lst, iTotalDisplayRecords: count, iTotalRecords: count, sEcho: params[:sEcho]}
   end
 
-  def save
-    # вариант для момента v2
-    fields = get_form_fields true
-    h = JSON.load params[:data]
-    if h['id'].blank?
-      obj = @cls.new
-    else
-      obj = @cls.find_by_id h['id']
-      unless obj
-        render text: "ОШИБКА: не найдена сущность id = #{h['id']}"
-        return
-      end
-    end
-    obj.assign_attributes h.slice(*fields)
-    obj.save if obj.errors.size==0
-    if obj.errors.size==0
-      render text: "#{params[:id]} #{obj.id} created"
-    else
-      errs = ["ОШИБКА: "].concat obj.errors.full_messages
-      render text: errs*"\n"
-    end
-  end
-
   def update
-    # вариант для момента v3
     fields = get_form_fields true
     h = params[:data]
     if h['id'].blank?
@@ -89,7 +69,10 @@ class DataController < ApplicationController
         return
       end
     end
-    obj.assign_attributes h.slice(*fields).permit!
+    new_attr = h.permit(*fields)
+    new_attr.each {|k,v| new_attr[k]=nil if v=='null' || v=='NULL' || v== 'undefined'}
+    new_attr = @cls.send(:custom_data, new_attr, params, session) if @cls.methods.include?(:custom_data)
+    obj.assign_attributes new_attr
     obj.save if obj.errors.size==0
     fields = ["id"].concat get_form_fields
     ret = obj.as_json( methods: fields, only: [] ).as_json

@@ -22,7 +22,7 @@
       }
     };
 
-    EntUI.prototype.table = function(target, entity_name, parent_prefix, parent_type, parent_id, parent_atr, ret_func_uplink, ret_fld_list) {
+    EntUI.prototype.table = function(target, entity_name, parent_prefix, parent_type, parent_id, foreign_key, parent_atr, ret_func_uplink, ret_fld_list) {
       var is_window, met, open_dialog_func, prefix, reload_func, select_uplink_func, table_interface, table_place, table_type;
       if (parent_prefix == null) {
         parent_prefix = "";
@@ -53,7 +53,7 @@
           }
         };
       })(this);
-      this.objs[prefix] = new this[table_interface](entity_name, met, this.callbacks[entity_name], table_place, prefix, table_type, parent_type, parent_id, parent_atr, open_dialog_func, select_uplink_func, ret_fld_list);
+      this.objs[prefix] = new this[table_interface](entity_name, met, this.callbacks[entity_name], table_place, prefix, table_type, parent_type, parent_id, foreign_key, parent_atr, open_dialog_func, select_uplink_func, ret_fld_list);
       this.objs[prefix].build();
       reload_func = (function(_this) {
         return function() {
@@ -85,7 +85,7 @@
       form_interface = met.opts['form']["interface"];
       proxy_uplink_func = (function(_this) {
         return function(uplink_entity_name, ret_fld_list, ret_func_uplink) {
-          return _this.table(form_place, uplink_entity_name, prefix, null, null, ret_func_uplink, ret_fld_list);
+          return _this.table(form_place, uplink_entity_name, prefix, null, null, null, null, ret_func_uplink, ret_fld_list);
         };
       })(this);
       open_parent_func = (function(_this) {
@@ -110,7 +110,7 @@
           tab_pls = $("<div id=\"" + tab_pref + "\"></div>");
           tabs_place.append(tab_pls);
           if (tab.kind === 'downlink') {
-            return _this.table(tab_pls, tab.entity || tab.name, prefix, entity_name, entity_id, tab.atr);
+            return _this.table(tab_pls, tab.entity || tab.name, prefix, entity_name, entity_id, tab.foreign_key, tab.atr);
           } else {
             if (_this["EntUI_tab_" + tab.kind]) {
               _this.add_prefix(tab_pref, entity_name);

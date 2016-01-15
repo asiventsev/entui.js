@@ -3,7 +3,7 @@
   var EntUIDataTable;
 
   EntUIDataTable = (function() {
-    function EntUIDataTable(entity_name, meta, callbacks, target, prefix, table_type, parent_type, parent_id, parent_atr, open_dialog_func, select_uplink_func, ret_fld_list) {
+    function EntUIDataTable(entity_name, meta, callbacks, target, prefix, table_type, parent_type, parent_id, foreign_key, parent_atr, open_dialog_func, select_uplink_func, ret_fld_list) {
       this.entity_name = entity_name;
       this.meta = meta;
       this.opts = meta.opts[table_type];
@@ -12,6 +12,7 @@
       this.prefix = prefix;
       this.table_type = table_type;
       this.parent_type = parent_type;
+      this.foreign_key = foreign_key;
       this.parent_atr = parent_atr;
       this.parent_id = parent_id;
       this.open_dialog_func = open_dialog_func;
@@ -243,6 +244,10 @@
         ],
         fnServerParams: (function(_this) {
           return function(aoData) {
+            aoData.push({
+              "name": "table_type",
+              "value": _this.table_type
+            });
             _.each(_this.meta.filters || [], function(f) {
               var v;
               v = _this.target.find($("#" + _this.prefix + "-flt-" + f.atr)).val();
@@ -263,12 +268,8 @@
                 "value": _this.parent_type
               });
               aoData.push({
-                "name": "prefix",
-                "value": _this.prefix
-              });
-              aoData.push({
-                "name": "parent_prefix",
-                "value": _this.get_parent_prefix()
+                "name": "foreign_key",
+                "value": _this.foreign_key
               });
             }
             if (_this.callbacks.table_server_params) {

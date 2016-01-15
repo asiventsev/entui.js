@@ -3,13 +3,13 @@
 # Публичные функции
 # Конструктор:
 # new EntUI::EntUIDataTable(entity_name, meta, callbacks, target, prefix, table_type, parent_type, parent_id,
-#    parent_atr, open_dialog_func, select_uplink_func, ret_fld_list)
+#    foreign_key, parent_atr, open_dialog_func, select_uplink_func, ret_fld_list)
 #
 # Построение таблицы: build()
 #
 
 class EntUIDataTable
-  constructor: (entity_name, meta, callbacks, target, prefix, table_type, parent_type, parent_id, parent_atr,
+  constructor: (entity_name, meta, callbacks, target, prefix, table_type, parent_type, parent_id, foreign_key, parent_atr,
     open_dialog_func, select_uplink_func, ret_fld_list) ->
     @entity_name = entity_name
     @meta = meta
@@ -19,6 +19,7 @@ class EntUIDataTable
     @prefix = prefix
     @table_type = table_type
     @parent_type = parent_type
+    @foreign_key = foreign_key
     @parent_atr = parent_atr
     @parent_id = parent_id
     @open_dialog_func = open_dialog_func
@@ -158,6 +159,7 @@ class EntUIDataTable
       # параметры запроса - собираем фильтры
       fnServerParams: (aoData)=>
         # параметры запроса - собираем фильтры
+        aoData.push {"name":"table_type","value":@table_type}
         _.each (@meta.filters or []), (f)=>
           v = @target.find($("##{@prefix}-flt-#{f.atr}")).val()
           aoData.push { "name": f.atr, "value": v} if v
@@ -165,8 +167,7 @@ class EntUIDataTable
         if @parent_id
           aoData.push {"name":"parent_id","value":@parent_id}
           aoData.push {"name":"parent_type","value":@parent_type}
-          aoData.push {"name":"prefix","value":@prefix}
-          aoData.push {"name":"parent_prefix","value":@get_parent_prefix()}
+          aoData.push {"name":"foreign_key","value":@foreign_key}
         # если есть коллбэк, отрабатываем
         @callbacks.table_server_params et, aoData if @callbacks.table_server_params
       # постобработка ряда
